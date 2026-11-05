@@ -1,0 +1,127 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Kampala Grocery Store</title>
+<style>
+*{box-sizing:border-box}
+body{margin:0;font-family:Arial,sans-serif;background:#f6f8f5;color:#222}
+header{background:#176b3a;color:white;padding:22px 5%;display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:12px}
+header h1{margin:0;font-size:24px}
+header p{margin:5px 0 0}
+button{cursor:pointer;border:0;border-radius:7px;padding:12px 17px;font-weight:bold}
+.cartbtn,.buy{background:#f4c542;color:#183c24}
+.hero{padding:55px 6%;background:#e3f2e5}
+.hero h2{font-size:34px;margin:0 0 12px;color:#176b3a}
+.hero p{font-size:17px;line-height:1.6}
+.search{padding:12px;width:100%;max-width:500px;border:1px solid #ccc;border-radius:7px;font-size:16px}
+main{padding:25px 5%}
+.categories{display:flex;gap:10px;flex-wrap:wrap;margin:20px 0}
+.categories button{background:#e1eadf;color:#176b3a}
+.categories button.active{background:#176b3a;color:white}
+.products{display:grid;grid-template-columns:repeat(auto-fit,minmax(190px,1fr));gap:18px}
+.product{background:white;border-radius:12px;padding:17px;box-shadow:0 2px 9px #00000012}
+.emoji{font-size:48px}
+.product h3{margin:10px 0}
+.price{color:#176b3a;font-weight:bold;font-size:18px}
+.buy{width:100%;margin-top:12px}
+.panel{background:white;padding:20px;border-radius:12px;margin-top:28px}
+input,select{padding:12px;width:100%;margin:7px 0;border:1px solid #ccc;border-radius:6px}
+.total{font-size:18px;font-weight:bold}
+footer{background:#176b3a;color:white;padding:25px;text-align:center;margin-top:40px}
+</style>
+</head>
+<body>
+<header>
+<div><h1>🛒 Kampala Grocery Store</h1><p>Your home shopping made easier</p></div>
+<button class="cartbtn" onclick="document.getElementById('cart').scrollIntoView()">My Basket (<span id="count">0</span>)</button>
+</header>
+
+<section class="hero">
+<h2>Shop for your home from anywhere in Kampala</h2>
+<p>Fresh food, groceries and household essentials delivered to your doorstep.</p>
+<input class="search" id="search" placeholder="Search for products..." oninput="render()">
+</section>
+
+<main>
+<h2>Shop our products</h2>
+<div class="categories" id="categories"></div>
+<div class="products" id="products"></div>
+
+<section class="panel" id="cart">
+<h2>🛍️ Your Shopping Basket</h2>
+<div id="items">Your basket is empty.</div>
+<p>Shopping subtotal: <strong id="subtotal">UGX 0</strong></p>
+<p>Service fee: <strong>UGX 31,000</strong></p>
+<p>Transportation: <strong>Calculated according to delivery distance</strong></p>
+<p class="total">Total before transportation: <span id="total">UGX 0</span></p>
+<h3>Delivery details</h3>
+<form onsubmit="placeOrder(event)">
+<input id="customer" placeholder="Your full name" required>
+<input id="phone" placeholder="Your telephone number" required>
+<input id="address" placeholder="Your delivery location / area in Kampala" required>
+<select id="payment" required>
+<option value="">Choose payment method</option>
+<option>Mobile Money</option>
+<option>Card payment</option>
+</select>
+<p><small>Transportation will be quoted separately based on your delivery distance. Payment integration and order confirmation will be activated in the next stage.</small></p>
+<button class="buy" type="submit">Continue to checkout</button>
+</form>
+</section>
+</main>
+
+<footer>
+<h3>Kampala Grocery Store</h3>
+<p>Convenient shopping. Reliable delivery.</p>
+<p>Serving Kampala, Uganda.</p>
+</footer>
+
+<script>
+const products=[
+{name:"Fresh Tomatoes",price:3000,category:"Fresh Food",emoji:"🍅"},
+{name:"Onions",price:4000,category:"Fresh Food",emoji:"🧅"},
+{name:"Irish Potatoes",price:5000,category:"Fresh Food",emoji:"🥔"},
+{name:"Matooke",price:5000,category:"Fresh Food",emoji:"🍌"},
+{name:"Carrots",price:3000,category:"Fresh Food",emoji:"🥕"},
+{name:"Rice 1kg",price:6000,category:"Groceries",emoji:"🍚"},
+{name:"Sugar 1kg",price:5000,category:"Groceries",emoji:""},
+{name:"Cooking Oil 1L",price:8500,category:"Groceries",emoji:"🫗"},
+{name:"Wheat Flour",price:5000,category:"Groceries",emoji:"🌾"},
+{name:"Milk 1L",price:4500,category:"Groceries",emoji:"🥛"},
+{name:"Eggs Tray",price:15000,category:"Groceries",emoji:"🥚"},
+{name:"Laundry Soap",price:4000,category:"Household",emoji:"🧼"},
+{name:"Toilet Paper",price:6000,category:"Household",emoji:"🧻"},
+{name:"Dishwashing Liquid",price:5000,category:"Household",emoji:"🧴"},
+{name:"Toothpaste",price:5000,category:"Personal Care",emoji:"🪥"}
+];
+let cart={};
+let category="All";
+const money=n=>"UGX "+n.toLocaleString("en-UG");
+function render(){
+let q=document.getElementById("search").value.toLowerCase();
+document.getElementById("categories").innerHTML=["All","Fresh Food","Groceries","Household","Personal Care"].map(c=>`<button class="${category===c?'active':''}" onclick="category='${c}';render()">${c}</button>`).join("");
+document.getElementById("products").innerHTML=products.filter(p=>(category==="All"||p.category===category)&&p.name.toLowerCase().includes(q)).map(p=>`<div class="product"><div class="emoji">${p.emoji||"🛒"}</div><h3>${p.name}</h3><div class="price">${money(p.price)}</div><button class="buy" onclick="add('${p.name}')">Add to basket</button></div>`).join("");
+showCart();
+}
+function add(name){cart[name]=(cart[name]||0)+1;showCart()}
+function change(name,amount){cart[name]+=amount;if(cart[name]<=0)delete cart[name];showCart()}
+function showCart(){
+let names=Object.keys(cart);
+let subtotal=names.reduce((s,n)=>s+products.find(p=>p.name===n).price*cart[n],0);
+document.getElementById("items").innerHTML=names.length?names.map(n=>`<p>${n} — ${cart[n]} <button onclick="change('${n}',-1)">−</button> <button onclick="change('${n}',1)">+</button></p>`).join(""):"Your basket is empty.";
+document.getElementById("subtotal").textContent=money(subtotal);
+document.getElementById("total").textContent=money(subtotal+31000);
+document.getElementById("count").textContent=names.reduce((s,n)=>s+cart[n],0);
+}
+function placeOrder(e){
+e.preventDefault();
+if(!Object.keys(cart).length){alert("Please add products to your basket first.");return}
+alert("Your details have been entered. Online payment and order submission are not connected yet. We will activate these in the next stage.");
+}
+render();
+</script>
+</body>
+</html>
