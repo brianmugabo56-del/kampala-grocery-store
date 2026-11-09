@@ -3,125 +3,421 @@
 <html lang="en">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Kampala Grocery Store</title>
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="theme-color" content="#125c38">
+<title>ZAVORA | Groceries & Household Shopping</title>
 <style>
+:root{--green:#125c38;--dark:#103d29;--lime:#dff2df;--gold:#f5c64c;--bg:#f5f7f4;--white:#fff;--muted:#68736b;--border:#e2e8e1;--red:#b83232}
 *{box-sizing:border-box}
-body{margin:0;font-family:Arial,sans-serif;background:#f6f8f5;color:#222}
-header{background:#176b3a;color:white;padding:22px 5%;display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:12px}
-header h1{margin:0;font-size:24px}
-header p{margin:5px 0 0}
-button{cursor:pointer;border:0;border-radius:7px;padding:12px 17px;font-weight:bold}
-.cartbtn,.buy{background:#f4c542;color:#183c24}
-.hero{padding:55px 6%;background:#e3f2e5}
-.hero h2{font-size:34px;margin:0 0 12px;color:#176b3a}
-.hero p{font-size:17px;line-height:1.6}
-.search{padding:12px;width:100%;max-width:500px;border:1px solid #ccc;border-radius:7px;font-size:16px}
-main{padding:25px 5%}
-.categories{display:flex;gap:10px;flex-wrap:wrap;margin:20px 0}
-.categories button{background:#e1eadf;color:#176b3a}
-.categories button.active{background:#176b3a;color:white}
-.products{display:grid;grid-template-columns:repeat(auto-fit,minmax(190px,1fr));gap:18px}
-.product{background:white;border-radius:12px;padding:17px;box-shadow:0 2px 9px #00000012}
-.emoji{font-size:48px}
-.product h3{margin:10px 0}
-.price{color:#176b3a;font-weight:bold;font-size:18px}
-.buy{width:100%;margin-top:12px}
-.panel{background:white;padding:20px;border-radius:12px;margin-top:28px}
-input,select{padding:12px;width:100%;margin:7px 0;border:1px solid #ccc;border-radius:6px}
-.total{font-size:18px;font-weight:bold}
-footer{background:#176b3a;color:white;padding:25px;text-align:center;margin-top:40px}
+body{margin:0;background:var(--bg);font-family:Arial,Helvetica,sans-serif;color:#202820}
+button,input,select{font:inherit}
+button{cursor:pointer}
+header{background:var(--green);color:white;padding:14px 5%;display:flex;align-items:center;justify-content:space-between;gap:15px;position:sticky;top:0;z-index:5;box-shadow:0 2px 8px #0002}
+.brand{font-size:27px;font-weight:900;letter-spacing:2px}
+.tagline{font-size:12px;color:#d9eddf;margin-top:4px}
+.header-actions{display:flex;gap:8px;flex-wrap:wrap}
+.btn{border:0;border-radius:8px;padding:11px 15px;font-weight:bold}
+.primary{background:var(--green);color:white}
+.gold{background:var(--gold);color:#23351f}
+.light{background:#edf4ed;color:var(--green)}
+.danger{background:#fae5e5;color:var(--red)}
+.hero{background:linear-gradient(110deg,#e4f3e6,#f5f7e9);padding:45px 6%}
+.hero h1{font-size:clamp(27px,4vw,43px);color:var(--dark);margin:0 0 12px}
+.hero p{max-width:650px;line-height:1.7;color:#475b4b}
+.search{width:100%;max-width:650px;padding:15px;border:1px solid #ccd9ce;border-radius:9px;background:white}
+.container{max-width:1250px;margin:auto;padding:25px 4%}
+.section-title{display:flex;justify-content:space-between;align-items:center;gap:10px;flex-wrap:wrap}
+.categories{display:flex;gap:9px;flex-wrap:wrap;margin:18px 0}
+.categories button{border:1px solid var(--border);border-radius:30px;padding:10px 15px;background:white;color:var(--green)}
+.categories button.active{background:var(--green);color:white}
+.products{display:grid;grid-template-columns:repeat(auto-fill,minmax(205px,1fr));gap:16px}
+.product{background:white;border:1px solid var(--border);border-radius:12px;padding:16px;display:flex;flex-direction:column;gap:9px}
+.product-art{height:110px;border-radius:9px;background:#f0f5ee;display:grid;place-items:center;font-size:57px}
+.product h3{margin:3px 0;font-size:17px}
+.muted{color:var(--muted);font-size:13px}
+.price{font-weight:800;color:var(--green);font-size:18px}
+.product select,.product input{width:100%;padding:10px;border:1px solid var(--border);border-radius:7px;background:white}
+.product .btn{width:100%;margin-top:auto}
+.panel{background:white;border:1px solid var(--border);border-radius:12px;padding:20px;margin:24px 0}
+.panel h2{margin-top:0;color:var(--dark)}
+.cart-row{display:grid;grid-template-columns:1fr auto;gap:12px;border-bottom:1px solid var(--border);padding:14px 0}
+.cart-controls{display:flex;align-items:center;gap:7px;flex-wrap:wrap}
+.cart-controls button{padding:7px 11px;border:0;border-radius:6px;background:var(--lime)}
+.cart-total{max-width:500px;margin-left:auto;line-height:2}
+.total-line{display:flex;justify-content:space-between;gap:10px}
+.grand{font-size:20px;font-weight:900;color:var(--green);border-top:1px solid var(--border);padding-top:10px}
+.form-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:12px}
+.field{display:flex;flex-direction:column;gap:6px}
+.field.full{grid-column:1/-1}
+.field label{font-size:13px;font-weight:bold}
+.field input,.field select,.field textarea{width:100%;padding:12px;border:1px solid #ccd6cc;border-radius:7px;background:white}
+.field textarea{min-height:75px}
+.note{background:#fff8df;padding:12px;border-radius:8px;font-size:13px;line-height:1.5}
+.hidden{display:none!important}
+footer{background:var(--dark);color:white;text-align:center;padding:30px 15px;margin-top:35px}
+.tabs{display:flex;gap:8px;flex-wrap:wrap;margin:15px 0}
+.tabs button{background:#edf4ed;color:var(--green)}
+.tabs button.active{background:var(--green);color:white}
+.table-wrap{overflow-x:auto}
+table{width:100%;border-collapse:collapse;min-width:550px}
+th,td{text-align:left;padding:11px;border-bottom:1px solid var(--border);font-size:13px}
+th{background:#edf4ed}
+.status{font-size:12px;padding:5px 9px;border-radius:20px;background:#e6f4e8;color:#17643b}
+.small{font-size:12px;color:var(--muted)}
+.modal{position:fixed;inset:0;background:#0008;display:grid;place-items:center;z-index:10;padding:15px}
+.modal-content{background:white;border-radius:13px;padding:22px;width:100%;max-width:450px;max-height:90vh;overflow:auto}
+@media(max-width:600px){
+ header{padding:12px 4%}.brand{font-size:22px}
+ .hero{padding:30px 5%}.container{padding:18px 4%}
+ .products{grid-template-columns:repeat(2,minmax(0,1fr));gap:9px}
+ .product{padding:10px}.product-art{height:85px;font-size:43px}
+ .product h3{font-size:14px}.price{font-size:15px}
+ .btn{padding:10px}.form-grid{grid-template-columns:1fr}
+ .field.full{grid-column:auto}.cart-row{grid-template-columns:1fr}
+}
 </style>
 </head>
 <body>
+
 <header>
-<div><h1>🛒 Kampala Grocery Store</h1><p>Your home shopping made easier</p></div>
-<button class="cartbtn" onclick="document.getElementById('cart').scrollIntoView()">My Basket (<span id="count">0</span>)</button>
+ <div>
+  <div class="brand">ZAVORA</div>
+  <div class="tagline">GROCERIES. ESSENTIALS. DELIVERED.</div>
+ </div>
+ <div class="header-actions">
+  <button class="btn light" onclick="showSection('account')">My Account</button>
+  <button class="btn gold" onclick="showSection('shopCart')">Basket (<span id="cartCount">0</span>)</button>
+ </div>
 </header>
 
 <section class="hero">
-<h2>Shop for your home from anywhere in Kampala</h2>
-<p>Fresh food, groceries and household essentials delivered to your doorstep.</p>
-<input class="search" id="search" placeholder="Search for products..." oninput="render()">
+ <h1>Everything your home needs, in one place.</h1>
+ <p>Shop fresh food, groceries, drinks and household essentials from ZAVORA. Select the quantities you need and arrange delivery across Kampala.</p>
+ <input class="search" id="search" placeholder="Search sugar, rice, tomatoes, toilet paper..." oninput="renderProducts()">
 </section>
 
-<main>
-<h2>Shop our products</h2>
-<div class="categories" id="categories"></div>
-<div class="products" id="products"></div>
+<main class="container">
+ <section id="shop">
+  <div class="section-title">
+   <h2>Shop our products</h2>
+   <span class="muted" id="productCount"></span>
+  </div>
+  <div class="categories" id="categories"></div>
+  <div class="products" id="products"></div>
+ </section>
 
-<section class="panel" id="cart">
-<h2>🛍️ Your Shopping Basket</h2>
-<div id="items">Your basket is empty.</div>
-<p>Shopping subtotal: <strong id="subtotal">UGX 0</strong></p>
-<p>Service fee: <strong>UGX 31,000</strong></p>
-<p>Transportation: <strong>Calculated according to delivery distance</strong></p>
-<p class="total">Total before transportation: <span id="total">UGX 0</span></p>
-<h3>Delivery details</h3>
-<form onsubmit="placeOrder(event)">
-<input id="customer" placeholder="Your full name" required>
-<input id="phone" placeholder="Your telephone number" required>
-<input id="address" placeholder="Your delivery location / area in Kampala" required>
-<select id="payment" required>
-<option value="">Choose payment method</option>
-<option>Mobile Money</option>
-<option>Card payment</option>
-</select>
-<p><small>Transportation will be quoted separately based on your delivery distance. Payment integration and order confirmation will be activated in the next stage.</small></p>
-<button class="buy" type="submit">Continue to checkout</button>
-</form>
-</section>
+ <section class="panel" id="shopCart">
+  <h2>🛒 Your shopping basket</h2>
+  <div id="cartItems">Your basket is empty.</div>
+  <div class="cart-total">
+   <div class="total-line"><span>Product subtotal</span><strong id="subtotal">UGX 0</strong></div>
+   <div class="total-line"><span>Service fee (once per order)</span><strong id="serviceFee">UGX 0</strong></div>
+   <div class="total-line"><span>Transportation</span><strong id="deliveryFee">To be calculated</strong></div>
+   <div class="total-line grand"><span>Total before transportation</span><span id="total">UGX 0</span></div>
+  </div>
+  <p class="note">The UGX 31,000 service fee is charged once per order, not per product. Delivery is charged separately according to the delivery location.</p>
+ </section>
+
+ <section class="panel" id="checkout">
+  <h2>📦 Delivery and checkout details</h2>
+  <form id="orderForm" onsubmit="submitOrder(event)">
+   <div class="form-grid">
+    <div class="field"><label>Full name *</label><input id="customerName" required></div>
+    <div class="field"><label>Telephone number *</label><input id="customerPhone" type="tel" placeholder="07XXXXXXXX" required></div>
+    <div class="field"><label>Alternative telephone</label><input id="altPhone" type="tel"></div>
+    <div class="field"><label>Delivery area *</label>
+     <select id="area" required>
+      <option value="">Select your area</option>
+      <option>Kampala Central</option><option>Nakawa</option><option>Makindye</option>
+      <option>Kawempe</option><option>Rubaga</option><option>Ntinda</option>
+      <option>Bugolobi</option><option>Muyenga</option><option>Kololo</option>
+      <option>Ntinda</option><option>Kira</option><option>Naalya</option>
+      <option>Najjanankumbi</option><option>Other</option>
+     </select>
+    </div>
+    <div class="field full"><label>Exact delivery address / landmark *</label><textarea id="address" placeholder="Building, road, nearby landmark, house number..." required></textarea></div>
+    <div class="field"><label>Preferred delivery date</label><input id="deliveryDate" type="date"></div>
+    <div class="field"><label>Preferred delivery time</label>
+     <select id="deliveryTime"><option>Any convenient time</option><option>Morning</option><option>Afternoon</option><option>Evening</option></select>
+    </div>
+    <div class="field"><label>Payment method *</label>
+     <select id="paymentMethod" required>
+      <option value="">Select payment method</option>
+      <option>MTN Mobile Money</option><option>Airtel Money</option>
+      <option>Visa / Mastercard</option>
+     </select>
+    </div>
+    <div class="field"><label>Additional instructions</label><input id="instructions" placeholder="Any special instructions"></div>
+   </div>
+   <p class="note">Payment must be confirmed before an order is accepted. Payment gateway connection is not yet activated on this prototype.</p>
+   <button type="submit" class="btn primary" style="width:100%;margin-top:15px">Continue to checkout</button>
+  </form>
+  <div id="orderMessage" class="hidden"></div>
+ </section>
+
+ <section class="panel" id="account">
+  <h2>👤 Customer account</h2>
+  <p>Create an account or sign in to manage your shopping.</p>
+  <div class="form-grid">
+   <div class="field"><label>Your name</label><input id="accountName"></div>
+   <div class="field"><label>Phone number</label><input id="accountPhone"></div>
+  </div>
+  <button class="btn primary" onclick="saveAccount()">Save customer details on this device</button>
+  <p class="small">This is a local demonstration only. Secure online accounts and password authentication require a backend.</p>
+  <div id="accountMessage"></div>
+  <h3>My orders</h3>
+  <div id="orderHistory">No orders recorded on this device.</div>
+ </section>
+
+ <section class="panel" id="admin">
+  <h2>⚙️ ZAVORA management preview</h2>
+  <p class="note">This is a local demonstration dashboard, not a secure live administration system. Do not use it to store real customer or supplier data.</p>
+  <div class="tabs">
+   <button class="btn active" onclick="adminTab('productsTab',this)">Products</button>
+   <button class="btn" onclick="adminTab('suppliersTab',this)">Suppliers</button>
+   <button class="btn" onclick="adminTab('ordersTab',this)">Orders</button>
+   <button class="btn" onclick="adminTab('reportsTab',this)">Reports</button>
+  </div>
+  <div id="productsTab">
+   <h3>Product catalogue</h3>
+   <div class="table-wrap"><table><thead><tr><th>Product</th><th>Unit</th><th>Price</th><th>Category</th></tr></thead><tbody id="adminProducts"></tbody></table></div>
+   <h3>Add a product</h3>
+   <div class="form-grid">
+    <div class="field"><label>Product name</label><input id="newName"></div>
+    <div class="field"><label>Price in UGX per unit</label><input id="newPrice" type="number" min="1"></div>
+    <div class="field"><label>Unit</label><select id="newUnit"><option>KG</option><option>Gram</option><option>Litre</option><option>Millilitre</option><option>Roll</option><option>Piece</option><option>Pack</option><option>Tray</option><option>Bottle</option><option>Bar</option><option>Box</option><option>Bag</option></select></div>
+    <div class="field"><label>Category</label><select id="newCategory"><option>Fresh Food</option><option>Groceries</option><option>Drinks</option><option>Household</option><option>Personal Care</option></select></div>
+   </div>
+   <button class="btn primary" onclick="addProduct()">Add product</button>
+  </div>
+  <div id="suppliersTab" class="hidden">
+   <h3>Supplier management preview</h3>
+   <p>Supplier name, phone, location, supplied products, agreed prices, availability and payment terms will be managed here once the database is connected.</p>
+  </div>
+  <div id="ordersTab" class="hidden">
+   <h3>Order management preview</h3>
+   <p>Real customer orders will appear here after the order database and payment gateway are connected.</p>
+  </div>
+  <div id="reportsTab" class="hidden">
+   <h3>Financial reporting preview</h3>
+   <p>Sales, service fees, delivery revenue, supplier costs, expenses and net profit will be calculated from verified transactions after backend integration.</p>
+  </div>
+ </section>
 </main>
 
 <footer>
-<h3>Kampala Grocery Store</h3>
-<p>Convenient shopping. Reliable delivery.</p>
-<p>Serving Kampala, Uganda.</p>
+ <h2>ZAVORA</h2>
+ <p>Groceries. Essentials. Delivered.</p>
+ <p>Kampala, Uganda</p>
+ <p class="small">Prices shown are sample demonstration prices and must be verified before selling.</p>
 </footer>
 
 <script>
+const SERVICE_FEE=31000;
 const products=[
-{name:"Fresh Tomatoes",price:3000,category:"Fresh Food",emoji:"🍅"},
-{name:"Onions",price:4000,category:"Fresh Food",emoji:"🧅"},
-{name:"Irish Potatoes",price:5000,category:"Fresh Food",emoji:"🥔"},
-{name:"Matooke",price:5000,category:"Fresh Food",emoji:"🍌"},
-{name:"Carrots",price:3000,category:"Fresh Food",emoji:"🥕"},
-{name:"Rice 1kg",price:6000,category:"Groceries",emoji:"🍚"},
-{name:"Sugar 1kg",price:5000,category:"Groceries",emoji:""},
-{name:"Cooking Oil 1L",price:8500,category:"Groceries",emoji:"🫗"},
-{name:"Wheat Flour",price:5000,category:"Groceries",emoji:"🌾"},
-{name:"Milk 1L",price:4500,category:"Groceries",emoji:"🥛"},
-{name:"Eggs Tray",price:15000,category:"Groceries",emoji:"🥚"},
-{name:"Laundry Soap",price:4000,category:"Household",emoji:"🧼"},
-{name:"Toilet Paper",price:6000,category:"Household",emoji:"🧻"},
-{name:"Dishwashing Liquid",price:5000,category:"Household",emoji:"🧴"},
-{name:"Toothpaste",price:5000,category:"Personal Care",emoji:"🪥"}
-];
+["Sugar","5000","KG","Groceries","🍚",0.5],
+["Rice","6000","KG","Groceries","🍚",0.5],
+["Wheat Flour","5000","KG","Groceries","🌾",0.5],
+["Maize Flour","3500","KG","Groceries","🌽",0.5],
+["Beans","6000","KG","Groceries","🫘",0.5],
+["Peas","7000","KG","Groceries","🫘",0.5],
+["Groundnuts","8000","KG","Groceries","🥜",0.5],
+["Salt","2000","KG","Groceries","🧂",0.5],
+["Cooking Oil","8500","Litre","Groceries","🫗",0.5],
+["Milk","4500","Litre","Groceries","🥛",0.5],
+["Tea Leaves","5000","Pack","Groceries","🍵",1],
+["Coffee","10000","Pack","Groceries","☕",1],
+["Spaghetti","5000","Pack","Groceries","🍝",1],
+["Macaroni","5000","Pack","Groceries","🍝",1],
+["Tomatoes","3000","KG","Fresh Food","🍅",0.5],
+["Onions","4000","KG","Fresh Food","🧅",0.5],
+["Irish Potatoes","5000","KG","Fresh Food","🥔",0.5],
+["Sweet Potatoes","4000","KG","Fresh Food","🍠",0.5],
+["Cassava","4000","KG","Fresh Food","🥔",0.5],
+["Carrots","3000","KG","Fresh Food","🥕",0.5],
+["Cabbage","3000","Piece","Fresh Food","🥬",1],
+["Green Pepper","5000","KG","Fresh Food","🫑",0.5],
+["Eggplants","4000","KG","Fresh Food","🍆",0.5],
+["Bananas","5000","Bunch","Fresh Food","🍌",1],
+["Matooke","5000","Bunch","Fresh Food","🍌",1],
+["Oranges","4000","KG","Fresh Food","🍊",0.5],
+["Apples","8000","KG","Fresh Food","🍎",0.5],
+["Watermelon","7000","Piece","Fresh Food","🍉",1],
+["Pineapple","4000","Piece","Fresh Food","🍍",1],
+["Avocado","1000","Piece","Fresh Food","🥑",1],
+["Chicken","15000","KG","Fresh Food","🍗",0.5],
+["Beef","18000","KG","Fresh Food","🥩",0.5],
+["Fresh Fish","15000","KG","Fresh Food","🐟",0.5],
+["Eggs","15000","Tray","Fresh Food","🥚",1],
+["Mineral Water","1000","Bottle","Drinks","💧",1],
+["Soda","2000","Bottle","Drinks","🥤",1],
+["Juice","5000","Litre","Drinks","🧃",1],
+["Yoghurt","5000","Bottle","Drinks","🥛",1],
+["Toilet Paper","6000","Roll","Household","🧻",1],
+["Toilet Paper Pack of 4","20000","Pack","Household","🧻",1],
+["Toilet Paper Pack of 10","45000","Pack","Household","🧻",1],
+["Laundry Soap","4000","Bar","Household","🧼",1],
+["Washing Powder","6000","KG","Household","🧺",0.5],
+["Dishwashing Liquid","5000","Bottle","Household","🧴",1],
+["Bleach","5000","Litre","Household","🧴",1],
+["Garbage Bags","5000","Pack","Household","🗑️",1],
+["Tissue Paper","5000","Pack","Household","🧻",1],
+["Toothpaste","5000","Tube","Personal Care","🪥",1],
+["Toothbrush","3000","Piece","Personal Care","🪥",1],
+["Bathing Soap","4000","Bar","Personal Care","🧼",1],
+["Body Lotion","12000","Bottle","Personal Care","🧴",1],
+["Petroleum Jelly","7000","Jar","Personal Care","🧴",1],
+["Shampoo","10000","Bottle","Personal Care","🧴",1],
+["Sanitary Pads","8000","Pack","Personal Care","🛍️",1],
+["Deodorant","12000","Piece","Personal Care","🧴",1]
+].map((p,i)=>({id:i,name:p[0],price:Number(p[1]),unit:p[2],category:p[3],emoji:p[4],step:p[5]}));
+
 let cart={};
-let category="All";
-const money=n=>"UGX "+n.toLocaleString("en-UG");
-function render(){
-let q=document.getElementById("search").value.toLowerCase();
-document.getElementById("categories").innerHTML=["All","Fresh Food","Groceries","Household","Personal Care"].map(c=>`<button class="${category===c?'active':''}" onclick="category='${c}';render()">${c}</button>`).join("");
-document.getElementById("products").innerHTML=products.filter(p=>(category==="All"||p.category===category)&&p.name.toLowerCase().includes(q)).map(p=>`<div class="product"><div class="emoji">${p.emoji||"🛒"}</div><h3>${p.name}</h3><div class="price">${money(p.price)}</div><button class="buy" onclick="add('${p.name}')">Add to basket</button></div>`).join("");
-showCart();
+let activeCategory="All";
+let orders=JSON.parse(localStorage.getItem("zavoraOrders")||"[]");
+let savedAccount=JSON.parse(localStorage.getItem("zavoraAccount")||"{}");
+
+const money=n=>"UGX "+Math.round(n).toLocaleString("en-UG");
+const fmt=n=>Number(n.toFixed(3)).toString();
+
+function showSection(id){
+document.getElementById(id).scrollIntoView({behavior:"smooth"});
 }
-function add(name){cart[name]=(cart[name]||0)+1;showCart()}
-function change(name,amount){cart[name]+=amount;if(cart[name]<=0)delete cart[name];showCart()}
-function showCart(){
-let names=Object.keys(cart);
-let subtotal=names.reduce((s,n)=>s+products.find(p=>p.name===n).price*cart[n],0);
-document.getElementById("items").innerHTML=names.length?names.map(n=>`<p>${n} — ${cart[n]} <button onclick="change('${n}',-1)">−</button> <button onclick="change('${n}',1)">+</button></p>`).join(""):"Your basket is empty.";
+
+function renderCategories(){
+const cats=["All","Fresh Food","Groceries","Drinks","Household","Personal Care"];
+document.getElementById("categories").innerHTML=cats.map(c=>
+`<button class="${activeCategory===c?"active":""}" onclick="activeCategory='${c}';renderProducts()">${c}</button>`).join("");
+}
+
+function renderProducts(){
+renderCategories();
+const q=document.getElementById("search").value.toLowerCase();
+const filtered=products.filter(p=>(activeCategory==="All"||p.category===activeCategory)&&p.name.toLowerCase().includes(q));
+document.getElementById("productCount").textContent=filtered.length+" products";
+document.getElementById("products").innerHTML=filtered.map(p=>`
+<div class="product">
+ <div class="product-art">${p.emoji}</div>
+ <h3>${p.name}</h3>
+ <div class="price">${money(p.price)}</div>
+ <div class="muted">Price per ${p.unit}</div>
+ <label class="muted">Quantity (${p.unit})</label>
+ <input type="number" id="qty-${p.id}" min="${p.step}" step="${p.step}" value="1">
+ <button class="btn gold" onclick="addToCart(${p.id})">Add to basket</button>
+</div>`).join("");
+}
+
+function addToCart(id){
+const p=products.find(x=>x.id===id);
+const input=document.getElementById("qty-"+id);
+const qty=Number(input.value);
+if(!Number.isFinite(qty)||qty<=0||Math.abs(qty/p.step-Math.round(qty/p.step))>0.000001){
+alert("Enter a valid quantity in increments of "+p.step+" "+p.unit+".");return;
+}
+cart[id]=Number(((cart[id]||0)+qty).toFixed(3));
+renderCart();
+alert(p.name+" added to basket.");
+}
+
+function changeQty(id,d){
+const p=products.find(x=>x.id===id);
+cart[id]=Number((cart[id]+d*p.step).toFixed(3));
+if(cart[id]<=0)delete cart[id];
+renderCart();
+}
+
+function removeItem(id){delete cart[id];renderCart();}
+
+function renderCart(){
+const ids=Object.keys(cart).map(Number);
+const subtotal=ids.reduce((sum,id)=>sum+products.find(p=>p.id===id).price*cart[id],0);
+document.getElementById("cartCount").textContent=ids.reduce((sum,id)=>sum+cart[id],0);
+document.getElementById("cartItems").innerHTML=ids.length?ids.map(id=>{
+const p=products.find(x=>x.id===id);
+return `<div class="cart-row">
+<div><strong>${p.name}</strong><br><span class="muted">${fmt(cart[id])} ${p.unit} × ${money(p.price)}</span><br><strong>${money(cart[id]*p.price)}</strong></div>
+<div class="cart-controls">
+<button onclick="changeQty(${id},-${p.step})">−</button>
+<strong>${fmt(cart[id])}</strong>
+<button onclick="changeQty(${id},${p.step})">+</button>
+<button class="danger" onclick="removeItem(${id})">Remove</button>
+</div></div>`;
+}).join(""):"Your basket is empty.";
+const fee=ids.length?SERVICE_FEE:0;
 document.getElementById("subtotal").textContent=money(subtotal);
-document.getElementById("total").textContent=money(subtotal+31000);
-document.getElementById("count").textContent=names.reduce((s,n)=>s+cart[n],0);
+document.getElementById("serviceFee").textContent=money(fee);
+document.getElementById("total").textContent=money(subtotal+fee);
 }
-function placeOrder(e){
+
+function saveAccount(){
+const name=document.getElementById("accountName").value.trim();
+const phone=document.getElementById("accountPhone").value.trim();
+if(!name||!phone){alert("Enter your name and phone number.");return;}
+savedAccount={name,phone};
+localStorage.setItem("zavoraAccount",JSON.stringify(savedAccount));
+document.getElementById("accountMessage").textContent="Details saved on this device.";
+}
+
+function submitOrder(e){
 e.preventDefault();
-if(!Object.keys(cart).length){alert("Please add products to your basket first.");return}
-alert("Your details have been entered. Online payment and order submission are not connected yet. We will activate these in the next stage.");
+if(!Object.keys(cart).length){alert("Your basket is empty.");return;}
+const ids=Object.keys(cart).map(Number);
+const subtotal=ids.reduce((sum,id)=>sum+products.find(p=>p.id===id).price*cart[id],0);
+const order={
+reference:"ZAV-"+Date.now(),
+customer:document.getElementById("customerName").value,
+phone:document.getElementById("customerPhone").value,
+area:document.getElementById("area").value,
+address:document.getElementById("address").value,
+payment:document.getElementById("paymentMethod").value,
+items:ids.map(id=>({name:products.find(p=>p.id===id).name,quantity:cart[id],unit:products.find(p=>p.id===id).unit,amount:products.find(p=>p.id===id).price*cart[id]})),
+subtotal,serviceFee:SERVICE_FEE,total:subtotal+SERVICE_FEE,
+status:"Awaiting payment integration"
+};
+orders.push(order);
+localStorage.setItem("zavoraOrders",JSON.stringify(orders));
+const msg=document.getElementById("orderMessage");
+msg.classList.remove("hidden");
+msg.innerHTML="<h3>Order details prepared</h3><p>Reference: "+order.reference+"</p><p>Subtotal: "+money(subtotal)+"</p><p>Service fee: "+money(SERVICE_FEE)+"</p><p>Total before delivery: "+money(order.total)+"</p><p><strong>This is a demonstration only. No payment has been taken and your order has not been sent to ZAVORA.</strong></p>";
+renderHistory();
 }
-render();
+
+function renderHistory(){
+document.getElementById("orderHistory").innerHTML=orders.length?orders.map(o=>`<div class="panel"><strong>${o.reference}</strong><br>${o.customer} · ${money(o.total)}<br><span class="status">${o.status}</span></div>`).join(""):"No orders recorded on this device.";
+}
+
+function adminTab(id,btn){
+["productsTab","suppliersTab","ordersTab","reportsTab"].forEach(x=>document.getElementById(x).classList.add("hidden"));
+document.getElementById(id).classList.remove("hidden");
+document.querySelectorAll(".tabs button").forEach(x=>x.classList.remove("active"));
+btn.classList.add("active");
+}
+
+function addProduct(){
+const name=document.getElementById("newName").value.trim();
+const price=Number(document.getElementById("newPrice").value);
+const unit=document.getElementById("newUnit").value;
+const category=document.getElementById("newCategory").value;
+if(!name||price<=0){alert("Enter a product name and valid price.");return;}
+products.push({id:Math.max(...products.map(p=>p.id))+1,name,price,unit,category,emoji:"🛒",step:unit==="KG"||unit==="Litre"?0.5:1});
+renderProducts();renderAdmin();
+document.getElementById("newName").value="";
+document.getElementById("newPrice").value="";
+alert("Product added to this browser's current session.");
+}
+
+function renderAdmin(){
+document.getElementById("adminProducts").innerHTML=products.map(p=>`<tr><td>${p.name}</td><td>${p.unit}</td><td>${money(p.price)}</td><td>${p.category}</td></tr>`).join("");
+}
+
+if(savedAccount.name){
+document.getElementById("accountName").value=savedAccount.name;
+document.getElementById("accountPhone").value=savedAccount.phone;
+}
+renderProducts();
+renderCart();
+renderAdmin();
+renderHistory();
 </script>
 </body>
 </html>
